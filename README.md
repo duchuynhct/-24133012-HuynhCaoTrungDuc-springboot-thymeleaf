@@ -21,6 +21,7 @@
 | :--- | :--- | :--- | :--- |
 | **Ngôn ngữ** | Java Development Kit (JDK) | **25.0.2** | Oracle OpenJDK 25 |
 | **Framework** | Spring Boot | **4.1.1 / 3.x** | Spring Web MVC, Spring Data JPA |
+| **Web Server** | **Apache Tomcat (nhúng)** | **11.0.24** | Chuẩn Jakarta EE 11 / Servlet 6.1 |
 | **View Engine** | **Thymeleaf** | **3.x** | Render HTML chuẩn phía máy chủ |
 | **Layout Decorator** | **Thymeleaf Layout Dialect** | **3.x** | Quản lý Master Layout (`layout:decorate`, `layout:fragment`) |
 | **Cơ sở dữ liệu** | Microsoft SQL Server | 2019 / 2022 | Database độc lập `SpringBootThymeleafDB` |
@@ -186,9 +187,9 @@ spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
   ```powershell
   .\mvnw.cmd spring-boot:run
   ```
-- **Truy cập hệ thống trên trình duyệt:**
-  - Trang chủ Dashboard: [http://localhost:8080/admin/home](http://localhost:8080/admin/home)
-  - Trang Quản lý Category: [http://localhost:8080/admin/categories](http://localhost:8080/admin/categories)
+- **Truy cập hệ thống trên trình duyệt (Port 8081 - tránh trùng port 8080 của dự án cũ):**
+  - Trang chủ Dashboard: [http://localhost:8081/admin/home](http://localhost:8081/admin/home)
+  - Trang Quản lý Category: [http://localhost:8081/admin/categories](http://localhost:8081/admin/categories)
 
 ---
 
