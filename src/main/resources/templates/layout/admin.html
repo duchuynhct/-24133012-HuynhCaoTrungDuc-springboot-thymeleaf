@@ -40,23 +40,36 @@
             background-color: #0d6efd !important;
             box-shadow: 0 4px 6px -1px rgba(13, 110, 253, 0.25);
         }
+        .avatar-container {
+            cursor: pointer;
+            position: relative;
+        }
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
         }
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            background-color: #22c55e;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
+        .avatar-container:hover .user-avatar {
+            transform: scale(1.05);
+        }
+        .avatar-edit-icon {
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: -2px;
+            right: -2px;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #ffffff;
         }
         .footer-school {
             background-color: #ffffff;
@@ -68,7 +81,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- 1. Header (Navbar chứa hình ảnh đại diện của sinh viên Huỳnh Cao Trung Đức) -->
+    <!-- 1. Header (Navbar chứa thông tin sinh viên & tính năng upload ảnh cá nhân) -->
     <header class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
         <div class="container-fluid px-3">
             <a class="navbar-brand fw-bold d-flex align-items-center" th:href="@{/admin/home}">
@@ -79,10 +92,19 @@
 
             <!-- Khối người dùng bên phải Header -->
             <div class="d-flex align-items-center ms-auto">
-                <div class="position-relative me-3 d-flex align-items-center">
-                    <img th:src="@{/images/avatar.png}" alt="Huỳnh Cao Trung Đức" class="user-avatar me-2"
-                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Trung+Duc&background=0D6EFD&color=fff&bold=true';">
-                    <span class="status-dot"></span>
+                <!-- Avatar sinh viên: Nhấn vào để mở modal tải ảnh lên -->
+                <div class="avatar-container me-3 d-flex align-items-center" 
+                     data-bs-toggle="modal" 
+                     data-bs-target="#avatarUploadModal" 
+                     title="Nhấn vào đây để tải ảnh thật của bạn lên">
+                    <img th:src="${session.userAvatarUrl != null ? session.userAvatarUrl : '/images/default-avatar.svg'}" 
+                         alt="Huỳnh Cao Trung Đức" 
+                         class="user-avatar"
+                         id="headerUserAvatar"
+                         onerror="this.onerror=null; this.src='/images/default-avatar.svg';">
+                    <span class="avatar-edit-icon" title="Tải ảnh cá nhân lên">
+                        <i class="bi bi-camera-fill"></i>
+                    </span>
                 </div>
                 <div class="text-white lh-sm d-none d-md-block text-end">
                     <div class="fw-semibold small">Huỳnh Cao Trung Đức</div>
@@ -116,6 +138,13 @@
 
                 <hr class="my-4 text-secondary opacity-25">
 
+                <!-- Nút tải ảnh đại diện ở sidebar -->
+                <div class="d-grid mb-3">
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#avatarUploadModal">
+                        <i class="bi bi-cloud-arrow-up me-1"></i> Đổi ảnh đại diện
+                    </button>
+                </div>
+
                 <div class="bg-light rounded p-3 text-center border">
                     <div class="small fw-bold text-dark">Thymeleaf Dialect</div>
                     <div class="small text-muted" style="font-size: 0.75rem;">Layout Dialect 3.x</div>
@@ -124,6 +153,16 @@
 
             <!-- 3. Main Content Area (Nơi tiêm nội dung từ các trang con) -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 flex-grow-1">
+                <!-- Thông báo chung hệ thống -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
                 <div layout:fragment="content">
                     <!-- Nội dung trang con sẽ được chèn vào đây -->
                 </div>
@@ -146,11 +185,71 @@
         </div>
     </footer>
 
+    <!-- Modal Tải Lên Ảnh Đại Diện Cá Nhân Của Sinh Viên -->
+    <div class="modal fade" id="avatarUploadModal" tabindex="-1" aria-labelledby="avatarUploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form th:action="@{/admin/upload-avatar}" method="post" enctype="multipart/form-data">
+                    <div class="modal-header bg-primary text-white py-3">
+                        <h5 class="modal-title fs-6 fw-bold" id="avatarUploadModalLabel">
+                            <i class="bi bi-camera-fill me-2"></i>Tải Ảnh Đại Diện Của Bạn Lên
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4 text-center">
+                        <!-- Vùng xem trước ảnh đã chọn -->
+                        <div class="mb-3">
+                            <img id="avatarPreview" 
+                                 th:src="${session.userAvatarUrl != null ? session.userAvatarUrl : '/images/default-avatar.svg'}" 
+                                 alt="Xem trước ảnh" 
+                                 class="rounded-circle border border-3 border-primary shadow-sm" 
+                                 style="width: 120px; height: 120px; object-fit: cover;"
+                                 onerror="this.onerror=null; this.src='/images/default-avatar.svg';">
+                        </div>
+
+                        <p class="small text-muted mb-3">
+                            Chọn bức ảnh chân dung thật từ máy tính của bạn (hỗ trợ JPG, PNG, WEBP).
+                        </p>
+
+                        <div class="mb-3 text-start">
+                            <label for="avatarFileInput" class="form-label fw-bold small">Chọn tệp ảnh từ máy tính:</label>
+                            <input class="form-control" type="file" id="avatarFileInput" name="avatarFile" 
+                                   accept="image/png, image/jpeg, image/jpg, image/webp" required
+                                   onchange="previewUploadedAvatar(this)">
+                        </div>
+
+                        <div class="alert alert-light border small text-muted text-start mb-0 py-2">
+                            <i class="bi bi-info-circle text-primary me-1"></i>
+                            Ảnh sẽ được lưu trực tiếp vào hệ thống và hiển thị ngay trên thanh Header.
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-2">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> Tải lên & Lưu ảnh
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Script kích hoạt active link menu tự động -->
+    <!-- Script xem trước ảnh đại diện khi chọn file từ máy tính -->
     <script>
+        function previewUploadedAvatar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Script kích hoạt active link menu tự động
         document.addEventListener("DOMContentLoaded", function () {
             const currentPath = window.location.pathname;
             document.querySelectorAll('.sidebar .nav-link').forEach(link => {
