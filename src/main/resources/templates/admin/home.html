@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+    <title>Trang Chủ Quản Trị</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <!-- Tiêu đề trang -->
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">
+                    <i class="bi bi-speedometer2 text-primary me-2"></i>Bảng Điều Khiển Quản Trị
+                </h1>
+                <p class="text-muted small mb-0">Hệ thống quản lý Danh mục sản phẩm sử dụng Spring Boot và Thymeleaf Layout Dialect</p>
+            </div>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a th:href="@{/admin/categories/add}" class="btn btn-primary shadow-sm">
+                    <i class="bi bi-plus-circle-fill me-1"></i> Thêm Danh Mục Mới
+                </a>
+            </div>
+        </div>
+
+        <!-- Banner Chào Mừng -->
+        <div class="card border-0 shadow-sm mb-4 bg-primary text-white rounded-3 overflow-hidden">
+            <div class="card-body p-4 position-relative">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <span class="badge bg-white text-primary fw-bold mb-2">Bài tập Lập trình Web</span>
+                        <h2 class="fw-bold mb-2">Xin chào, Huỳnh Cao Trung Đức!</h2>
+                        <p class="mb-0 text-white-50">
+                            MSSV: <b>24133012</b> &bull; Trường Đại học Công nghệ Kỹ thuật TP.HCM (HCM-UTE).<br>
+                            Chào mừng bạn đến với hệ thống quản trị Category được xây dựng hoàn toàn bằng <b>Thymeleaf & Layout Dialect</b>.
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a th:href="@{/admin/categories}" class="btn btn-light fw-semibold text-primary px-4 py-2 shadow-sm">
+                            <i class="bi bi-grid-fill me-1"></i> Vào Quản Lý Category
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Các thẻ Thống Kê & Phím Tắt Nhanh -->
+        <div class="row g-3 mb-4">
+            <!-- Thẻ 1: Tổng số danh mục -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-3">
+                    <div class="card-body p-4 d-flex align-items-center">
+                        <div class="rounded-3 bg-primary-subtle text-primary p-3 me-3">
+                            <i class="bi bi-grid-3x3-gap-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small fw-semibold text-uppercase">Tổng số Danh mục</div>
+                            <h3 class="fw-bold mb-0 text-dark" th:text="${totalCategories}">0</h3>
+                            <a th:href="@{/admin/categories}" class="text-decoration-none small text-primary fw-semibold">
+                                Xem chi tiết danh sách <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thẻ 2: Thêm mới nhanh -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-3">
+                    <div class="card-body p-4 d-flex align-items-center">
+                        <div class="rounded-3 bg-success-subtle text-success p-3 me-3">
+                            <i class="bi bi-folder-plus fs-3"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small fw-semibold text-uppercase">Tạo mới Category</div>
+                            <h5 class="fw-bold mb-1 text-dark">Thêm danh mục</h5>
+                            <a th:href="@{/admin/categories/add}" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-plus-lg me-1"></i>Tạo ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thẻ 3: Trạng thái hệ thống -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-3">
+                    <div class="card-body p-4 d-flex align-items-center">
+                        <div class="rounded-3 bg-info-subtle text-info p-3 me-3">
+                            <i class="bi bi-database-check fs-3"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small fw-semibold text-uppercase">Cơ Sở Dữ Liệu</div>
+                            <h5 class="fw-bold mb-1 text-dark">SpringBootThymeleafDB</h5>
+                            <span class="badge bg-success-subtle text-success">
+                                <i class="bi bi-check-circle me-1"></i>SQL Server Đã kết nối
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng Thông Tin Kiến Trúc Kỹ Thuật -->
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h5 class="card-title mb-0 fw-bold text-dark">
+                    <i class="bi bi-cpu-fill text-primary me-2"></i>Thông Tin Công Nghệ & Kiến Trúc Áp Dụng
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark mb-3"><i class="bi bi-layers-fill text-primary me-2"></i>Giao Diện & View Engine</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check2 text-success me-2 fw-bold"></i><b>Thymeleaf:</b> Render HTML server-side chuẩn XML/HTML5.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-success me-2 fw-bold"></i><b>Thymeleaf Layout Dialect:</b> Quản lý Master Layout, Header, Sidebar, Footer.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-success me-2 fw-bold"></i><b>Bootstrap 5.3.3 & Icons:</b> Thiết kế hiện đại, tương thích Responsive.</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark mb-3"><i class="bi bi-hdd-network-fill text-primary me-2"></i>Backend & Cơ Sở Dữ Liệu</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check2 text-success me-2 fw-bold"></i><b>Spring Boot 4.x / 3.x:</b> Spring Web MVC, Spring Data JPA.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-success me-2 fw-bold"></i><b>Microsoft SQL Server:</b> CSDL độc lập <code>SpringBootThymeleafDB</code>.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-success me-2 fw-bold"></i><b>Project Lombok:</b> Tối ưu mã nguồn sạch sẽ, không boilerplate.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
