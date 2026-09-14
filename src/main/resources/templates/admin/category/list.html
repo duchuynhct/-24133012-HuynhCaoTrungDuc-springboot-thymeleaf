@@ -121,7 +121,8 @@
                                         </a>
                                         <a th:href="@{/admin/categories/delete/{id}(id=${cat.id})}" 
                                            class="btn btn-outline-danger" title="Xóa"
-                                           th:onclick="'return confirm(\'Bạn có chắc chắn muốn xóa danh mục: [' + ${cat.categoryName} + '] không?\');'">
+                                           th:data-name="${cat.categoryName}"
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục: [' + this.getAttribute('data-name') + '] không?');">
                                             <i class="bi bi-trash"></i> Xóa
                                         </a>
                                     </div>
